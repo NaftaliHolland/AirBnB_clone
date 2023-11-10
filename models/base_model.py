@@ -3,7 +3,8 @@ This module define a BaseModel class.
 """
 import uuid
 from datetime import datetime
-
+#from models.__init__ import storage
+import models
 
 class BaseModel:
     """
@@ -12,7 +13,8 @@ class BaseModel:
     def __init__(self, *args, **kwargs):
         my_uuid = uuid.uuid4()
         self.id = str(my_uuid)
-
+        models.storage.new(self)
+        
         if kwargs:
             for key in kwargs.keys():
                 if key != "__class__":
@@ -38,6 +40,7 @@ class BaseModel:
         with the current datetime
         """
         self.updated_at = datetime.now()
+        models.storage.save()
 
     def to_dict(self):
         """
