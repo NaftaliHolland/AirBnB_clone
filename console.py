@@ -8,6 +8,14 @@ import json
 import cmd
 import sys
 from models.base_model import BaseModel
+
+from models.user import User
+from models.place import Place
+from models.city import City
+from models.state import State
+from models.amenity import Amenity
+from models.review import Review
+
 from models.__init__ import storage
 from models.engine.file_storage import FileStorage
 
@@ -16,56 +24,53 @@ class HBNBCommand(cmd.Cmd):
     Contains the entry point of the command interpreter
     """
     prompt = "(hbnb) "
+    global child_classes
+    global objects
+
+    file = FileStorage()
+    child_classes = [cls.__name__ for cls in BaseModel.__subclasses__()]
+    child_classes.append("BaseModel")
+    print(child_classes)
 
     def do_EOF(self, line):
         """Quits the interpreter"""
         return True
 
-    def do_quit(self):
+    def do_quit(self, arg):
         """Quit command to exit the program"""
-        sys.exit()
+        return True
 
     def emptyline(self):
         """Print nothing when an empty line is the input"""
         pass
 
     def do_create(self, line):
-        arguments = line
-
-        if arguments == "BaseModel":
-            new_instance = BaseModel()
-            new_instance = new_instance.to_dict()
-            print(new_instance)
-            
-            for key in new_instance:
-                if key == "id":
-                    print(new_instance["id"])
-            
-            with open("file.json", "w") as file:
-                json.dump(new_instance, file)
-
-        elif len(sys.arg) < 2:
-            print("** class name missing **")
+        if line:
+            if line in child_classes:
+                class_name = globals()[line]
+                new_instance = class_name()
+                new_instance.save()
+            else:
+                print("** class name doesn't exist **")
         else:
-            print("** class doesn't exist **")
+            print("** class name missing **")
 
     def do_show(self, line):
         """ Prints the string representation of an instance based on the class"""
         
-        #arguments = line
-        #a, b = arguments.split(" ")
-        """
-        with open("file.json", "r") as file:
-            content = json.load(file)
-       
-        for key in content:
-            if content[key] == b:
-                print(content.all())
-        """
-
-        all_objects = storage.all()
-        print(all_objects)
-
+        if line:
+            a = line.split(" ")
+            if a[0] in child_classes:
+                key = f"{a[0]}.{a[1]}"
+                print(objects)
+                if key in objects.keys():
+                    print(objects[key])
+                else:
+                    print("** instance id missing **")
+            else:
+                print("** class doesn't exist **")
+        else:
+            print("** class name missing **")
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
