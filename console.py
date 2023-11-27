@@ -15,6 +15,7 @@ from models.city import City
 from models.state import State
 from models.amenity import Amenity
 from models.review import Review
+from models import storage
 
 from models.__init__ import storage
 from models.engine.file_storage import FileStorage
@@ -24,13 +25,12 @@ class HBNBCommand(cmd.Cmd):
     Contains the entry point of the command interpreter
     """
     prompt = "(hbnb) "
-    global child_classes
-    global objects
+    global CHILD_CLASSES
+    global OBJECTS
 
-    file = FileStorage()
-    child_classes = [cls.__name__ for cls in BaseModel.__subclasses__()]
-    child_classes.append("BaseModel")
-    print(child_classes)
+    CHILD_CLASSES = [cls.__name__ for cls in BaseModel.__subclasses__()]
+    CHILD_CLASSES.append("BaseModel")
+    OBJECTS = storage.all()
 
     def do_EOF(self, line):
         """Quits the interpreter"""
@@ -46,7 +46,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, line):
         if line:
-            if line in child_classes:
+            if line in CHILD_CLASSES:
                 class_name = globals()[line]
                 new_instance = class_name()
                 new_instance.save()
@@ -60,17 +60,36 @@ class HBNBCommand(cmd.Cmd):
         
         if line:
             a = line.split(" ")
-            if a[0] in child_classes:
+            if a[0] in CHILD_CLASSES:
                 key = f"{a[0]}.{a[1]}"
-                print(objects)
-                if key in objects.keys():
-                    print(objects[key])
+                if key in OBJECTS.keys():
+                    class_name = globals()[a[0]]
+                    new_instance = class_name(**OBJECTS[key])
+                    print(new_instance)
                 else:
-                    print("** instance id missing **")
+                    print("** no instance found **")
             else:
                 print("** class doesn't exist **")
         else:
             print("** class name missing **")
+
+    def do_destroy(self, line):
+        """ deletes an instance based on the class name and id """
+        if line:
+            a = line.split(" ")
+            if a[0] in CHILD_CLASSES:
+                key = f"{a[0]}.{a[1]}"
+                if key in OBJECTS.keys():
+                    class_name = globals()[a[0]]
+                    new_instance = class_name(**OBJECTS[key])
+                    new_instance.destroy()
+                else:
+                    print("** no instance found **")
+            else:
+                print("** class doesn't exist **")
+        else:
+            print("** class name missing **")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()

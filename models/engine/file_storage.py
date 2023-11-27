@@ -38,3 +38,11 @@ class FileStorage:
                 self.__objects = json.load(file)
         except FileNotFoundError:
             pass
+
+    def destroy(self, obj):
+        key = f"{obj.__class__.__name__}.{obj.id}"
+        del obj
+        del self.__objects[key]
+        print(self.__objects)
+        self.save()
+        

@@ -12,9 +12,6 @@ class BaseModel:
     """
     def __init__(self, *args, **kwargs):
 
-        my_uuid = uuid.uuid4()
-        self.id = str(my_uuid)
-
         if len(kwargs) > 0:
             for key, value in kwargs.items():
                 if key != "__class__":
@@ -24,6 +21,9 @@ class BaseModel:
                                 else kwargs[key])
                     setattr(self, key, value)
         else:
+            my_uuid = uuid.uuid4()
+            self.id = str(my_uuid)
+
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
 
@@ -54,9 +54,7 @@ class BaseModel:
         my_dict["created_at"] = self.created_at.isoformat() if isinstance(self.created_at, datetime) else self.created_at
         my_dict["updated_at"] = self.updated_at.isoformat() if isinstance(self.updated_at, datetime) else self.updated_at
         return my_dict
-    
-    """@classmethod
-    def get_subclasses(cls):
-         gets all the classes that inherit from BaseModel
 
-        return cls.__subclasses__"""
+    def destroy(self):
+        """ calls the destroy method of the FileStorage class """
+        storage.destroy(self)
