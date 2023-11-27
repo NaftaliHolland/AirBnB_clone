@@ -78,16 +78,19 @@ class HBNBCommand(cmd.Cmd):
         """ deletes an instance based on the class name and id """
         if line:
             a = line.split(" ")
-            if a[0] in CHILD_CLASSES:
-                key = f"{a[0]}.{a[1]}"
-                if key in OBJECTS.keys():
-                    class_name = globals()[a[0]]
-                    new_instance = class_name(**OBJECTS[key])
-                    new_instance.destroy()
+            if len(a) > 1:
+                if a[0] in CHILD_CLASSES:
+                    key = f"{a[0]}.{a[1]}"
+                    if key in OBJECTS.keys():
+                        class_name = globals()[a[0]]
+                        new_instance = class_name(**OBJECTS[key])
+                        new_instance.destroy()
+                    else:
+                        print("** no instance found **")
                 else:
-                    print("** no instance found **")
+                    print("** class doesn't exist **")
             else:
-                print("** class doesn't exist **")
+                print("** instance id missing **")
         else:
             print("** class name missing **")
 
