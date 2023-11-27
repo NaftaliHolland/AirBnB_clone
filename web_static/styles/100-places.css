@@ -57,14 +57,15 @@
 
 .information .max_guests, .number_rooms, .number_bathrooms {
 	width: 100px;
+	text-align: center;
 }
 
 .icon {
 	width: 100%;
 	height: 40px;
-	padding-left: 10px;
 	background-position: center center;
 	background-repeat: no-repeat;
+	background-size: contain;
 }
 
 .max_guests .icon {
@@ -80,5 +81,53 @@
 	background-image: url("../images/icon_bath.png");
 }
 
-.user {
+.amenities {
+	margin-top: 40px;
+}
+
+.title{
+	font-size: 16px;
+	border-bottom: 1px solid #DDDDDD;
+}
+
+ul {
+	padding: 0;
+}
+
+.amenities ul li {
+	display: flex;
+	align-items: center;
+}
+
+.amenities ul li .icon {
+	width: 30px;
+	height: 30px;
+	margin-right: 10px;
+}
+
+.amenities ul .tv .icon {
+	background-image: url("../images/icon_tv.png");
+}
+
+.amenities ul .pet .icon {
+	background-image: url("../images/icon_pets.png");
+}
+
+.amenities ul .wifi .icon {
+	background-image: url("../images/icon_wifi.png");
+}
+
+.reviews {
+	margin-top: 40px;
+}
+
+.reviews ul {
+	list-style: none;
+}
+
+.reviews ul h3 {
+	font-size: 14px;
+}
+.reviews p {
+	font-size: 12px;
 }
