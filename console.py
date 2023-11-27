@@ -50,8 +50,9 @@ class HBNBCommand(cmd.Cmd):
                 class_name = globals()[line]
                 new_instance = class_name()
                 new_instance.save()
+                print(new_instance.id)
             else:
-                print("** class name doesn't exist **")
+                print("** class doesn't exist **")
         else:
             print("** class name missing **")
 
@@ -89,7 +90,6 @@ class HBNBCommand(cmd.Cmd):
                 print("** class doesn't exist **")
         else:
             print("** class name missing **")
-
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
