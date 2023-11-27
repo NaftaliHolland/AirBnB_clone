@@ -62,13 +62,16 @@ class HBNBCommand(cmd.Cmd):
         if line:
             a = line.split(" ")
             if a[0] in CHILD_CLASSES:
-                key = f"{a[0]}.{a[1]}"
-                if key in OBJECTS.keys():
-                    class_name = globals()[a[0]]
-                    new_instance = class_name(**OBJECTS[key])
-                    print(new_instance)
+                if len(a) > 1:
+                    key = f"{a[0]}.{a[1]}"
+                    if key in OBJECTS.keys():
+                        class_name = globals()[a[0]]
+                        new_instance = class_name(**OBJECTS[key])
+                        print(new_instance)
+                    else:
+                        print("** no instance found **")
                 else:
-                    print("** no instance found **")
+                    print("** instance id missing **")
             else:
                 print("** class doesn't exist **")
         else:
